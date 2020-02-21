@@ -27,7 +27,7 @@ plt.ylim(-1, 1)
 cont = ax.contour(Y, Z, Fr, levels=[0.0], colors="#000000", linestyles="dashed")
 cont = ax.contour(Y, Z, Ft, levels=[0.0], colors="#000000")
 ### points
-plt.scatter(Ye, Ze, marker="x", c="red")
+plt.scatter(Ye, Ze, marker=",", s=60, c="red")
 ax.set_aspect("equal")
 
 plt.tight_layout()

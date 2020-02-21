@@ -2,8 +2,8 @@
 #include <math.h>
 #include "lagrange_interpolation_tools.h"
 
-// #define YMAX (1.0-(1.0+8.0/20)/6.7)
-#define YMAX 0.791045
+// #define YMAX (1.0-(1.0+8.0/20)/10.0)
+#define YMAX 0.86
 #define N 160
 #define NT 14
 #define ND 2
