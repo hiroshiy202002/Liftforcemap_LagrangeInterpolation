@@ -2,8 +2,6 @@
 #include <math.h>
 #include "lagrange_interpolation_tools.h"
 
-// #define YMAX (1.0-(1.0+8.0/20)/10.0)
-#define YMAX 0.86
 #define N 160
 #define NT 14
 #define ND 2
@@ -16,7 +14,7 @@ void lagint(double*, double*, double*, double*, double*, double*, int, int, int)
 void search_equilibriumpoints(double*, double*, int, int, double*, double*);
 void equilibriumpoint_by_newton_raphson_method
             (double*, double*, int, int, double*, double*);
-void outputdata(double*, double*, double*, int, double*, double*, double);
+void outputdata(double*, double*, double*, int, double*, double*);
 
 int main(void){
    double Fx[(NT+1)*(NT+1)], Fy[(NT+1)*(NT+1)], Fz[(NT+1)*(NT+1)];
@@ -28,7 +26,7 @@ int main(void){
    inputdata(Fx, Fy, Fz, NT);
    lagint(Fx, Fy, Fz, IntpltdFx, IntpltdFr, IntpltdFt, ND, NT, N);
    search_equilibriumpoints(Fy, Fz, ND, NT, Ye, Ze);
-   outputdata(IntpltdFx, IntpltdFr, IntpltdFt, N, Ye, Ze, YMAX);
+   outputdata(IntpltdFx, IntpltdFr, IntpltdFt, N, Ye, Ze);
    return(0);
 }
 
@@ -200,19 +198,23 @@ void equilibriumpoint_by_newton_raphson_method
    }
 }
 
-void outputdata(double *intpltdfx, double *intpltdfr, double *intpltdft,
-                                 int n, double *ye, double *ze, double ymax){
+void outputdata(double *intpltdfx, double *intpltdfr, double *intpltdft, int n,
+                                                         double *ye, double *ze){
    int np1 = n+1;
-   double y, z;
+   double ymax, y, z;
    int i, j, k;
-   FILE *fpfx, *fpfr, *fpft, *fpeqp;
-   char inputfilename1[] = "IntpltdFx.dat";
-   char inputfilename2[] = "IntpltdFr.dat";
-   char inputfilename3[] = "IntpltdFt.dat";
-   char inputfilename4[] = "EquilibriumPoints.dat";
-   fpfx = fopen(inputfilename1, "w");
-   fpfr = fopen(inputfilename2, "w");
-   fpft = fopen(inputfilename3, "w");
+   FILE *fp, *fpfx, *fpfr, *fpft, *fpeqp;
+   char inputfilename[] = "YMAX.dat";
+   char outputfilename1[] = "IntpltdFx.dat";
+   char outputfilename2[] = "IntpltdFr.dat";
+   char outputfilename3[] = "IntpltdFt.dat";
+   char outputfilename4[] = "EquilibriumPoints.dat";
+   fp = fopen(inputfilename, "r");
+      fscanf(fp, "%lf", &ymax);
+   fclose(fp);
+   fpfx = fopen(outputfilename1, "w");
+   fpfr = fopen(outputfilename2, "w");
+   fpft = fopen(outputfilename3, "w");
       fprintf(fpfx, "# y z Fx\n");
       fprintf(fpfr, "# y z Fr\n");
       fprintf(fpft, "# y z Ft\n");
@@ -234,7 +236,7 @@ void outputdata(double *intpltdfx, double *intpltdfr, double *intpltdft,
    fclose(fpfx);
    fclose(fpfr);
    fclose(fpft);
-   fpeqp = fopen(inputfilename4, "w");
+   fpeqp = fopen(outputfilename4, "w");
       fprintf(fpeqp, "# ye ze\n");
       for(i=0; i<8; i++){
          if(ye[i]==LARGEVAL) break;
